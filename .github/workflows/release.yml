@@ -37,4 +37,13 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: |
+            ${{ steps.meta.outputs.tags }},
+            ghcr.io/${{ github.repository_owner }}/${{ github.repository_name }}/example-go-k8s:${{ steps.meta.outputs.tags }}
+          # Set up additional parameters as needed for GitHub Packages
+          labels: org.opencontainers.image.title=My Image Name
+          # Add other metadata as needed for GitHub Packages
+      - name: Login to GitHub Packages
+        run: echo "${{ secrets.CONTAINER_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Push to GitHub Packages
+        run: docker push ghcr.io/${{ github.repository_owner }}/${{ github.repository_name }}/example-go-k8s:${{ steps.meta.outputs.tags }}
