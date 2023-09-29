@@ -12,9 +12,9 @@ import (
 	"time"
 )
 
-const waitShutdown = 30
-
 func main() {
+
+	const waitShutdown = 30
 
 	handler := handlers.NewHandler()
 
